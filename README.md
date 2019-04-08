@@ -2,5 +2,4 @@
 
 #### Table of Contents
 
-- SAS
-  + NBER recession indicator
+- NBER recession indicator (SAS & Stata)
