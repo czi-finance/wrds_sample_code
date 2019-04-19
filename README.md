@@ -94,9 +94,9 @@ keep gvkey yr datadate
 ;
 set _tmp2;
 be = coalesce(seq , ceq + pstk , at - lt - mib)
-	 + coalesce(txditc , txdb + itcb , 
-	            lt - lct - lo - dltt , 0)
-	 - coalesce(pstkrv , pstkl , pstk , 0)
+     + coalesce(txditc , txdb + itcb , 
+                lt - lct - lo - dltt , 0)
+     - coalesce(pstkrv , pstkl , pstk , 0)
 ;
 me_comp = prcc_f * csho;
 debt = dlc + dltt;
