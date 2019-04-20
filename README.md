@@ -73,8 +73,8 @@ var yr_0 - yr_&nyr.;
 run;
 ```
 
-For each `gvkey`, compute the market value of equity using `prccm` and `cshoq` from `comp.secm`.
-Aggregate it to a yearly frequency by keeping only the last non-missing value for each year.
+Compute the market value of equity using `prccm` and `cshoq` from `comp.secm`.
+Aggregate it to a yearly frequency by keeping only the last non-missing value for each firm-year.
 ```sas
 data _tmp14;
 keep gvkey yr datadate me_secm;
