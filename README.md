@@ -6,37 +6,42 @@
 - [Construct a panel without time gaps from Compustat](#build_panel)
 
 
-<a name="build_panel"></a>
-### Construct a panel without time gaps from [Compustat](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=60)
 
-*Step 1*: choose sample period and apply the standard and self-defined filters. 
+<a name="build_panel"></a>
+### Construct a panel data set without time gaps from Compustat universe
+
+The goal of this exercise is to construct a panel data set from the [Compustat](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=60) database that facilitates subsequent analysis.
+The resulting panel features a continuous yearly series without gap for each firm, which helps ensure the proper function of time-series operators. 
+The detailed procedure is as follows.
+
+Start with `comp.funda`, choose sample period and apply standard filters.
+Only keep relevant variables.
 The combination of `gvkey` and `datadate` is the key that uniquely identifies each observation.
-Only keep variables of interest.
 ```sas
 %let yr_beg = 1978;
 %let yr_end = 2017;
-%let std_comp_filter = ((consol eq 'C') and (indfmt eq 'INDL') and 
-                        (datafmt eq 'STD') and (popsrc eq 'D'));
+%let funda_filter = ((consol eq 'C') and (indfmt eq 'INDL') and 
+                     (datafmt eq 'STD') and (popsrc eq 'D') and
+                     (fic eq 'USA') and (at gt 0) and (sale gt 0));
+%let secm_filter = (primiss eq 'P' and fic eq 'USA' and curcdm eq 'USD');
 %let comp_sample_period = ("01jan&yr_beg."d le datadate le "31dec&yr_end."d);
-%let my_comp_filter = ((fic eq 'USA') and (at gt 0) and (sale gt 0));
-%let comp_keys = gvkey datadate;
-%let comp_funda_vars = conm sich at sale seq ceq pstk lt mib
-                       txditc txdb itcb pstkrv pstkl prcc_f 
-                       csho dlc dltt capx ppent ppegt invt ib
-                       dp cogs xsga lct lo
+%let funda_keys = gvkey datadate;
+%let funda_vars = conm sich at sale seq ceq pstk lt mib
+                  txditc txdb itcb pstkrv pstkl prcc_f 
+                  csho dlc dltt capx ppent ppegt invt ib
+                  dp cogs xsga lct lo
 ;
 
 data _tmp1;
 set comp.funda;
 where &comp_sample_period. 
-  and &std_comp_filter. 
-  and &my_comp_filter.
+  and &funda_filter.
 ;
-keep &comp_keys. &comp_funda_vars.;
+keep &funda_keys. &funda_vars.;
 run;
 ```
 
-*Step 2*: build a full yearly series without gap for each `gvkey`.
+Build a full yearly series without gap for each `gvkey` in the initial sample.
 ```sas
 proc sql;
 create table _tmp11 as
@@ -66,53 +71,82 @@ proc transpose
 by gvkey yr_beg yr_end;
 var yr_0 - yr_&nyr.;
 run;
+```
 
+For each `gvkey`, compute the market value of equity using `prccm` and `cshoq` from `comp.secm`.
+Aggregate it to a yearly frequency by keeping only the last non-missing value for each year.
+```sas
+data _tmp14;
+keep gvkey yr datadate me_secm;
+set comp.secm;
+where &secm_filter.
+  and &comp_sample_period.
+;
+yr = year(datadate);
+me_secm = prccm * cshoq;
+if not missing(me_secm);
+proc sort nodupkey; by gvkey yr datadate;
+data _tmp14; set _tmp14;
+by gvkey yr datadate;
+if last.yr;
+run;
+```
+
+Combine the information from different Compustat data sets and compute a group of variables.
+Use alternative definitions (and variables) in the calculation to reduce missing instances.
+```sas
 proc sql;
-create table _tmp2 as
-select a.gvkey , a.yr , b.*
+create table _tmp15 as
+select a.gvkey , a.yr , b.* , 
+       c.me_secm , input(d.sic , 8.) as sicn
 from _tmp13 as a
      left join
      _tmp1 as b
-on a.gvkey eq b.gvkey and
-   a.yr eq year(b.datadate)
+     on a.gvkey eq b.gvkey and
+        a.yr eq year(b.datadate)
+     left join
+     _tmp14 as c
+     on a.gvkey eq c.gvkey and
+        a.yr eq c.yr
+     left join
+     comp.names as d
+     on a.gvkey eq d.gvkey and
+        d.year1 le a.yr le d.year2
 order by a.gvkey , a.yr , b.datadate
 ;
 quit;
-```
 
-*Step 3*: calculate a group of variables.
-Keep only the relevant ones and reorder them.
-```sas
-data _tmp21;
+data _tmp2;
 format gvkey yr datadate
-       conm sich at sale ib
+       conm sic_comp at sale ib
        be me_comp debt ol pni 
 ;
 keep gvkey yr datadate 
-     conm sich at sale ib
+     conm sic_comp at sale ib
      be me_comp debt ol pni 
 ;
-set _tmp2;
+set _tmp15;
+sic_comp = coalesce(sich , sicn);
 be = coalesce(seq , ceq + pstk , at - lt - mib)
      + coalesce(txditc , txdb + itcb , 
                 lt - lct - lo - dltt , 0)
      - coalesce(pstkrv , pstkl , pstk , 0)
 ;
-me_comp = prcc_f * csho;
+me_comp = coalesce(prcc_f * csho , me_secm);
 debt = dlc + dltt;
 ol = (cogs + xsga) / at;
 pni = ppegt + invt;
 run;
 ```
 
-*Step 4*: keep only the last observation for each `gvkey` each `yr`.
+Keep only the last observation for each firm-year.
 ```sas
-proc sort data = _tmp21; by gvkey yr datadate;
-data _tmp21;
-set _tmp21;
+proc sort data = _tmp2; by gvkey yr datadate;
+data _tmp2;
+set _tmp2;
 by gvkey yr datadate;
 if last.yr;
 /* check uniqueness of the key */
-proc sort data = _tmp21 nodupkey; by gvkey yr; 
+proc sort nodupkey; by gvkey yr; 
 run;
 ```
