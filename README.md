@@ -3,12 +3,12 @@
 #### Table of Contents
 
 - NBER recession indicator (SAS & Stata)
-- [Construct a panel data set without time gaps from Compustat universe](#build_panel)
+- [Construct a panel data set without time gaps from the Compustat universe](#build_panel)
 
 
 
 <a name="build_panel"></a>
-### Construct a panel data set without time gaps from Compustat universe
+### Construct a panel data set without time gaps from the Compustat universe
 
 The goal of this exercise is to construct a panel data set from the [Compustat](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=60) database that facilitates subsequent analysis.
 The resulting panel features a continuous yearly series without gap for each firm, which helps ensure the proper function of time-series operators. 
