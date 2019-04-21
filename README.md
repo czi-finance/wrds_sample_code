@@ -3,7 +3,7 @@
 #### Table of Contents
 
 - NBER recession indicator (SAS & Stata)
-- [Construct a panel without time gaps from Compustat](#build_panel)
+- [Construct a panel data set without time gaps from Compustat universe](#build_panel)
 
 
 
