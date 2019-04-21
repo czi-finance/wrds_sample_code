@@ -1,3 +1,4 @@
+
 # Utilities
 
 #### Table of Contents
@@ -73,7 +74,7 @@ var yr_0 - yr_&nyr.;
 run;
 ```
 
-Compute the market value of equity using `prccm` and `cshoq` from `comp.secm`.
+Compute the market value of equity using `prccm` and `cshoq` of the primary issue (`primiss = 'P'`).
 Aggregate it to a yearly frequency by keeping only the last non-missing value for each firm-year.
 ```sas
 data _tmp14;
@@ -118,24 +119,21 @@ quit;
 
 data _tmp2;
 format gvkey yr datadate
-       conm sic_comp at sale ib
-       be me_comp debt ol pni 
+       conm sic at sale
+       be me 
 ;
 keep gvkey yr datadate 
-     conm sic_comp at sale ib
-     be me_comp debt ol pni 
+     conm sic at sale
+     be me 
 ;
 set _tmp15;
-sic_comp = coalesce(sich , sicn);
+sic = coalesce(sich , sicn);
 be = coalesce(seq , ceq + pstk , at - lt - mib)
      + coalesce(txditc , txdb + itcb , 
                 lt - lct - lo - dltt , 0)
      - coalesce(pstkrv , pstkl , pstk , 0)
 ;
-me_comp = coalesce(prcc_f * csho , me_secm);
-debt = dlc + dltt;
-ol = (cogs + xsga) / at;
-pni = ppegt + invt;
+me = coalesce(prcc_f * csho , me_secm);
 run;
 ```
 
