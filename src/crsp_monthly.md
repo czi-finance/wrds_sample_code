@@ -1,3 +1,5 @@
+The code below compiles a panel that contains monthly stock information.
+
 ```sas
 /* only include stocks that are ordinary common shares issued by companies incorporated in the US and listed on the NYSE, AMEX, or NASDAQ */
 %let msenames_std_filter = (shrcd in (10 , 11) and exchcd in (1 , 2 , 3));
