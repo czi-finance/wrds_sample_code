@@ -1,6 +1,6 @@
 # Sample SAS Programs for Processing WRDS Data
 
-In this repository, I present a selection of SAS programs that (pre-)process WRDS data.
+In this repository, I present a selection of SAS programs that (pre-)process [WRDS](https://wrds-www.wharton.upenn.edu/) data.
 My goal is to provide efficient procedures for turning raw data from various WRDS databases (e.g., CRSP, Compustat, IBES, etc.) into clean and well-structured datasets with only variables of interest, which are conducive to any econometric analysis that may follow.
 By walking through the steps in each program, one can
 (1) quickly gain a working knowledge of related raw data (e.g., file structures, variable definitions, etc.),
