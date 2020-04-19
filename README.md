@@ -13,5 +13,5 @@ I am happy to help!
 
 ### Table of Contents
 
-- [Construct a firm-year panel without time gap from Compustat]()
+- [Track companies' fundamentals using variables/measures from financial statements]()
 - [Compare companies' actual earnings with analysts' forecasts]()
