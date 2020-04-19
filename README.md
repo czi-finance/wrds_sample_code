@@ -13,5 +13,5 @@ I am happy to help!
 
 ### Table of Contents
 
-- [Track companies' fundamentals using variables/measures from financial statements]()
+- [Track companies' fundamentals with variables/measures from financial statements]()
 - [Compare companies' actual earnings with analysts' forecasts]()
