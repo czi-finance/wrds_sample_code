@@ -16,4 +16,4 @@ I am happy to help!
 - [Track companies' fundamentals with variables/measures from financial statements]()
 - [Compare companies' actual earnings with analysts' forecasts]()
 
-<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/img/aapl.png">   
+<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/img/aapl.png" width="700">   
