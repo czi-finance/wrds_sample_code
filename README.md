@@ -27,7 +27,7 @@ This data set can be used to address questions like:
 - What is driving the earnings surprises?
 
 As an illustration, I plot the figure below using this data. 
-It shows analysts' predictions of **Apple Inc.**'s EPS for the 2019 fiscal year, as well as the actual number as announced on October 30, 2019. 
+It shows analysts' predictions of **Apple Inc.**'s EPS for the 2019 fiscal year, as well as the actual number that was announced on October 30, 2019. 
 One can see that analysts made forecasts throughout the year, and overall, they seem to underestimate Apple's earnings for this fiscal year.
 
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/img/aapl.png" width="700">   
