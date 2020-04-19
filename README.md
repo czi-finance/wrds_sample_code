@@ -16,4 +16,20 @@ I am happy to help!
 - [Track companies' fundamentals with variables/measures from financial statements]()
 - [Compare companies' actual earnings with analysts' forecasts]()
 
+
+## Compare companies' actual earnings with analysts' forecasts
+
+In this program, I build from [IBES](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=221&_ga=2.202254610.2026535339.1587168594-1066308586.1576595708) a data set that contains US companies' actual *earnings per share* (EPS) for certain fiscal years, along with the corresponding forecasts made by financial analysts prior to earnings announcements.
+This data set can be used to address questions like:
+- Do analysts make rational predictions?
+- What is the impact of surprisingly high/low earnings?
+- What is driving the earnings surprises?
+
+As an illustration, I plot the figure below using this data. 
+It shows analysts' predictions of Apple's EPS for the 2019 fiscal year, as well as the actual number as announced on October 30, 2019. 
+One can see that analysts made forecasts throughout the year, and overall, they seem to underestimate Apple's earnings for this fiscal year.
+
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/img/aapl.png" width="700">   
+
+Without further ado, let's look at the code!
+
