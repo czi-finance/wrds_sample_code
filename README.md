@@ -32,5 +32,5 @@ One can see that analysts made forecasts throughout the year, and overall, they 
 
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/aapl.png" width="700">   
 
-Without further ado, let's check the code!
+Without further ado, let's dive into the code!
 
