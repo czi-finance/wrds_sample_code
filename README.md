@@ -55,7 +55,7 @@ set ibes.actu_epsus;
 where &ibes_actu_filter.;
 if pdicity eq "ANN" and nmiss(anndats , value) eq 0;
 keep ticker pends pdicity anndats value;
-/* Sanity check: there should be only one observation for a given firm-fiscal year. */
+/* Sanity check: there should be only one observation for a given firm-fiscal period. */
 proc sort nodupkey; by ticker pends pdicity;
 run;
 ```
