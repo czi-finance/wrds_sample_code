@@ -34,3 +34,50 @@ One can see that analysts made forecasts throughout the year, and overall, they 
 
 Without further ado, let's dive into the code!
 
+1. Begin by choosing sample period (e.g., from 1970 to 2020); `pends` and `fpedats` denote fiscal period end.
+Extract from `ibes.actu_epsus` the actual EPS data and apply a series of standard filters.
+The resulting data set `_tmp0` only covers U.S. firms that report EPS in dollars. 
+In this exercise, we focus on annual EPS instead of quarterly EPS (i.e., `pdicity eq  "ANN"`).
+Observations with missing announcement dates or EPS values are excluded.
+```sas
+%let yr_beg = 1970;
+%let yr_end = 2020;
+%let ibes_actu_period = ("01jan&yr_beg."d le pends le "31dec&yr_end."d);
+%let ibes_actu_filter = (measure eq "EPS" and anndats le actdats and
+                         curr_act eq "USD" and usfirm eq 1);
+%let ibes_detu_period = ("01jan&yr_beg."d le fpedats le "31dec&yr_end."d);
+%let ibes_detu_filter = (missing(currfl) and measure eq "EPS" and missing(curr) and
+                         usfirm eq 1 and anndats le actdats and report_curr eq "USD" );
+
+data _tmp0;
+format ticker pends pdicity anndats value;
+set ibes.actu_epsus;
+where &ibes_actu_filter.;
+if pdicity eq "ANN" and nmiss(anndats , value) eq 0;
+keep ticker pends pdicity anndats value;
+/* Sanity check: there should be only one observation for a given firm-fiscal year. */
+proc sort nodupkey; by ticker pends pdicity;
+run;
+```
+2. Extract from `ibes.detu_epsus` analysts' EPS forecasts and apply a series of standard filters.
+The resulting data set `_tmp1` only covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
+In this exercise, we only consider one-year-ahead forecasts (i.e., `fpi in ('1')`)
+Observations with missing *forecast* announcement dates or predicted EPS values are excluded.
+Each broker (`estimator`) may have multiple analysts (`analys`).
+Some EPS are on a primary basis while others on a diluted basis, as indicated by `pdf`.
+An analyst may make multiple forecasts throughout the period before the actual EPS announcement. 
+One can uncomment the last three lines of code to keep only the latest forecast from a given analyst. 
+```sas
+data _tmp1;
+format ticker fpedats estimator analys anndats pdf fpi value;
+set ibes.detu_epsus;
+where &ibes_detu_filter.;
+if fpi in ('1') and nmiss(anndats , value) eq 0;
+keep ticker fpedats estimator analys anndats pdf fpi value;
+proc sort; by ticker fpedats estimator analys anndats;
+/* data _tmp1; set _tmp1; */
+/* by ticker fpedats estimator analys anndats; */
+/* if last.analys; */
+run;
+```
+
