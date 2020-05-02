@@ -5,7 +5,7 @@ My goal is to provide efficient procedures for turning raw data from various WRD
 By walking through the steps in each program, one can
 (1) quickly gain a working knowledge of related raw data (e.g., file structures, variable definitions, etc.),
 and (2) understand the proper steps in the relevant clean processes.
-I believe these programs are well-written and should be pretty straightforward to interpret, even for people who are new to SAS.
+I believe these programs are well-written and should be pretty straightforward to interpret (even for people who are new to SAS).
 They are also very flexible and can be easily customized to fit specific research needs.
 (I personally have used these programs as building blocks for more complicated projects.)
 You should be able to run these programs smoothly on [SAS Studio](https://wrds-www.wharton.upenn.edu/pages/data/sas-studio-wrds/).
