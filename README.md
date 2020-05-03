@@ -59,6 +59,7 @@ keep ticker pends pdicity anndats value;
 proc sort nodupkey; by ticker pends pdicity;
 run;
 ```
+
 2. Extract from `ibes.detu_epsus` analysts' EPS forecasts and apply a series of standard filters.
 The resulting data set `_tmp1` only covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
 In this exercise, we only consider one-year-ahead forecasts (i.e., `fpi in ('1')`)
@@ -81,4 +82,98 @@ data _tmp1; set _tmp1;
 by ticker fpedats estimator analys anndats;
 if last.analys; * last.anndats;
 run;
+```
 
+3. Run a WRDS macro that creates a link table between IBES TICKER and CRSP PERMNO. Keep only high-quality links. Exclude cases where one *ticker* is matched to multiple *permno*.
+```sas
+%iclink (ibesid = ibes.id, crspid = crsp.stocknames, outset = iclnk);
+proc sort data = iclnk (where=(score in (0 , 1 , 2))) 
+  uniout = iclnk_uniperm nouniquekey; 
+by ticker; run;
+```
+
+4. Merge analyst forecasts with the actual EPS. Also, add the matched *permno* to each *ticker*.
+```sas
+proc sql;
+create table _tmp2 as
+select a.ticker, a.pends as fpedats, a.anndats, a.value as actval,
+       b.estimator as broker, b.analys, b.anndats as estdats, 
+       b.value as estval, c.permno
+from _tmp0 as a 
+left join _tmp1 as b
+  on a.ticker eq b.ticker and
+     a.pends eq b.fpedats
+left join iclnk_uniperm as c
+  on a.ticker eq c.ticker
+order by a.ticker, a.pends
+;
+quit;
+```
+
+5. Extract from CRSP daily stock file (`crsp.dsf`) the Cumulative Share Adjustment Factor for firm-years within the sample.
+```sas
+proc sort data = _tmp2 nodupkey out = permnos (keep = permno); 
+by permno; run; 
+
+proc sql; 
+create table dsf_short
+as select a.permno, a.date, a.prc, a.cfacshr 
+from crsp.dsf (where = (date ge "01jan&yr_beg."d)) as a , 
+     permnos as b
+where a.permno eq b.permno;
+quit; 
+```
+
+6. For each firm-fiscal year, find the latest stock price and adjustment factor on/before the earnings announcement date.
+For each analyst forecast, find the latest adjustment factor on/before the *forecast* announcement date.
+```sas
+proc sql;
+create table _tmp3 as
+select a.* , abs(b.prc) as prc_act, b.cfacshr as adjfac_act
+from _tmp2 as a left join dsf_short as b
+  on a.permno eq b.permno and 
+     intnx("week" , a.anndats , -1 , 'b') le b.date le a.anndats
+group by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
+having abs(a.anndats - b.date) eq min(abs(a.anndats - b.date))
+order by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
+;
+create table _tmp4 as
+select a.*, b.cfacshr as adjfac_est
+from _tmp3 as a left join dsf_short as b
+  on a.permno eq b.permno and 
+     intnx("week" , a.estdats , -1 , 'b') le b.date le a.estdats
+group by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
+having abs(a.estdats - b.date) eq min(abs(a.estdats - b.date))
+order by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
+;
+quit;
+```
+
+7. Adjust for potential stock splits between forecast date and actual EPS announcement date using CRSP adjustment factor. 
+Make sure that estimated EPS is based on the same number of shares outstanding as the actual EPS.
+```sas
+data _tmp5; set _tmp4;
+if adjfac_est eq 0 then adjfac_est = 1;
+if adjfac_act eq 0 then adjfac_act = 1;
+estval_adj = estval / coalesce(adjfac_est , 1) 
+                    * coalesce(adjfac_act , 1);
+drop adjfac: estval;
+run;
+```
+
+8. For each firm-fiscal year, compute the number of analysts' forecast and the consensus forecast (i.e., mean/median of all analysts' forecast).
+Only consider those made within 9 months before the announcement date.
+(If needed, one can add other measures as well.)
+```sas
+proc sql;
+create table _tmp6 as
+select ticker, permno, fpedats, anndats, actval, prc_act, count(*) as no_analys,
+       mean(estval_adj) as est_avg, median(estval_adj) as est_med
+from _tmp5 
+where intnx("mon" , anndats , -9 , 'b') le estdats lt anndats
+group by ticker, permno, fpedats, anndats, actval, prc_act
+;
+quit;
+proc sort nodupkey; by ticker fpedats;
+run;
+```
