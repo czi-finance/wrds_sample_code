@@ -52,32 +52,33 @@ Observations with missing announcement dates or EPS values are excluded.
 data _tmp0;
 format ticker pends pdicity anndats value;
 set ibes.actu_epsus;
-where &ibes_actu_filter.;
+where &ibes_actu_period. and &ibes_actu_filter.;
 if pdicity eq "ANN" and nmiss(anndats , value) eq 0;
 keep ticker pends pdicity anndats value;
-/* Sanity check: there should be only one observation for a given firm-fiscal period. */
+/* Sanity check: there should be only one observation for a given firm-fiscal year. */
 proc sort nodupkey; by ticker pends pdicity;
 run;
 ```
 2. Extract from `ibes.detu_epsus` analysts' EPS forecasts and apply a series of standard filters.
-The resulting data set `_tmp1` only covers U.S. firms that report EPS in dollars, and analysts who report predictions in dollars. 
+The resulting data set `_tmp1` only covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
 In this exercise, we only consider one-year-ahead forecasts (i.e., `fpi in ('1')`)
 Observations with missing *forecast* announcement dates or predicted EPS values are excluded.
 Each broker (`estimator`) may have multiple analysts (`analys`).
 Some EPS are on a primary basis while others on a diluted basis, as indicated by `pdf`.
 An analyst may make multiple forecasts throughout the period before the actual EPS announcement. 
-One can uncomment the last three lines of code to keep only the latest forecast from each analyst. 
+For each analyst, only her latest forecast before EPS announcements are kept. 
+Alternatively, one can change the last line of code to keep the latest forecast from a given analyst made on a given date.
+(Yes, analysts may report multiple forecasts on a given date.)
 ```sas
 data _tmp1;
 format ticker fpedats estimator analys anndats pdf fpi value;
 set ibes.detu_epsus;
-where &ibes_detu_filter.;
+where &ibes_detu_period. and &ibes_detu_filter.;
 if fpi in ('1') and nmiss(anndats , value) eq 0;
 keep ticker fpedats estimator analys anndats pdf fpi value;
 proc sort; by ticker fpedats estimator analys anndats;
-/* data _tmp1; set _tmp1; */
-/* by ticker fpedats estimator analys anndats; */
-/* if last.analys; */
+data _tmp1; set _tmp1;
+by ticker fpedats estimator analys anndats;
+if last.analys; * last.anndats;
 run;
-```
 
