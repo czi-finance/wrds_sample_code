@@ -92,7 +92,7 @@ proc sort data = iclnk (where=(score in (0 , 1 , 2)))
 by ticker; run;
 ```
 
-4. Merge analyst forecasts with the actual EPS. Also, add the matched *permno* to each *ticker*.
+4. Merge analysts' forecast with the actual EPS. Also, add the matched *permno* to each *ticker*.
 ```sas
 proc sql;
 create table _tmp2 as
@@ -124,8 +124,8 @@ where a.permno eq b.permno;
 quit; 
 ```
 
-6. For each firm-fiscal year, find the latest stock price and adjustment factor on/before the earnings announcement date.
-For each analyst forecast, find the latest adjustment factor on/before the *forecast* announcement date.
+6. For each firm-fiscal year, find the latest stock price and share adjustment factor on/before the earnings announcement date.
+For each analyst's forecast, find the latest adjustment factor on/before the *forecast* announcement date.
 ```sas
 proc sql;
 create table _tmp3 as
