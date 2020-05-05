@@ -36,8 +36,8 @@ Without further ado, let's dive into the code!
 
 1. Begin by choosing sample period (e.g., from 1970 to 2020); `pends` and `fpedats` denote fiscal period end.
 Extract from `ibes.actu_epsus` the actual EPS data and apply a series of standard filters.
-The resulting data set `_tmp0` only covers U.S. firms that report EPS in dollars. 
-In this exercise, we focus on annual EPS instead of quarterly EPS (i.e., `pdicity eq  "ANN"`).
+The resulting data set `_tmp0` covers U.S. firms that report EPS in dollars. 
+In this exercise, we focus on annual EPS instead of quarterly one (i.e., `pdicity eq  "ANN"`).
 Observations with missing announcement dates or EPS values are excluded.
 ```sas
 %let yr_beg = 1970;
@@ -55,11 +55,10 @@ set ibes.actu_epsus;
 where &ibes_actu_period. and &ibes_actu_filter.;
 if pdicity eq "ANN" and nmiss(anndats , value) eq 0;
 keep ticker pends pdicity anndats value;
-/* Sanity check: there should be only one observation for a given firm-fiscal year. */
+/* Sanity check: there should be only one observation for a given firm-fiscal period. */
 proc sort nodupkey; by ticker pends pdicity;
 run;
 ```
-
 2. Extract from `ibes.detu_epsus` analysts' EPS forecasts and apply a series of standard filters.
 The resulting data set `_tmp1` only covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
 In this exercise, we only consider one-year-ahead forecasts (i.e., `fpi in ('1')`)
@@ -67,7 +66,7 @@ Observations with missing *forecast* announcement dates or predicted EPS values 
 Each broker (`estimator`) may have multiple analysts (`analys`).
 Some EPS are on a primary basis while others on a diluted basis, as indicated by `pdf`.
 An analyst may make multiple forecasts throughout the period before the actual EPS announcement. 
-For each analyst, only her latest forecast before EPS announcements are kept. 
+For each analyst, only her latest forecast before EPS announcements are considered. 
 Alternatively, one can change the last line of code to keep the latest forecast from a given analyst made on a given date.
 (Yes, analysts may report multiple forecasts on a given date.)
 ```sas
@@ -84,96 +83,127 @@ if last.analys; * last.anndats;
 run;
 ```
 
-3. Run a WRDS macro that creates a link table between IBES TICKER and CRSP PERMNO. Keep only high-quality links. Exclude cases where one *ticker* is matched to multiple *permno*.
+3. Run a WRDS macro to create a link table between IBES TICKER and CRSP PERMNO. 
+Keep only high-quality links, and exclude cases where one *ticker* is matched to multiple *permno*.
+Create a list of all relevant *permno*, and then extract their price and share adjustment factor from CRSP daily stock file; keep only observations within the sample period.
 ```sas
-%iclink (ibesid = ibes.id, crspid = crsp.stocknames, outset = iclnk);
-proc sort data = iclnk (where=(score in (0 , 1 , 2))) 
+%iclink (ibesid = ibes.id , crspid = crsp.stocknames , outset = iclnk);
+proc sort data = iclnk (where = (score in (0 , 1 , 2))) 
   uniout = iclnk_uniperm nouniquekey; 
 by ticker; run;
+
+proc sort data = iclnk_uniperm nodupkey
+  out = allperm (keep = permno); 
+by permno; run;
+
+proc sql; 
+create table dsf_short as
+select a.permno , a.date , a.prc , a.cfacshr 
+from crsp.dsf as a , allperm as b
+where a.permno eq b.permno and
+      a.date ge "01jan&yr_beg."d
+;
+quit;
 ```
 
-4. Merge analysts' forecast with the actual EPS. Also, add the matched *permno* to each *ticker*.
+4. For each firm-fiscal year, obtain the latest stock price and share adjustment factor on/before the earnings announcement date.
+```sas
+proc sql;
+create table _tmp01 as
+select a.* , b.permno
+from _tmp0 as a , iclnk_uniperm as b
+where a.ticker eq b.ticker
+order by ticker , pends
+;
+create table _tmp02 as
+select a.* , abs(b.prc) as prc_act , b.cfacshr as adjfac_act
+from _tmp01 as a , dsf_short as b
+where a.permno eq b.permno and 
+      intnx("week" , a.anndats , -1 , 'b') le b.date le a.anndats
+group by a.ticker , a.pends , a.anndats
+having abs(a.anndats - b.date) eq min(abs(a.anndats - b.date))
+order by a.ticker , a.pends , a.anndats
+;
+quit;
+```
+
+5. For each analyst forecast, obtain the latest share adjustment factor on/before the *forecast* announcement date.
+```sas
+proc sql;
+create table _tmp11 as
+select a.* , b.permno
+from _tmp1 as a , iclnk_uniperm as b
+where a.ticker eq b.ticker
+order by ticker , fpedats , estimator , analys , anndats
+;
+create table _tmp12 as
+select a.* , b.cfacshr as adjfac_est
+from _tmp11 as a , dsf_short as b
+where a.permno eq b.permno and 
+      intnx("week" , a.anndats , -1 , 'b') le b.date le a.anndats
+group by a.ticker , a.fpedats , a.estimator , a.analys , a.anndats
+having abs(a.anndats - b.date) eq min(abs(a.anndats - b.date))
+order by a.ticker , a.fpedats , a.estimator , a.analys , a.anndats
+;
+quit;
+```
+
+6. Merge analysts' forecast with actual EPS. 
+To ensure predicted and actual EPS are based on the same number of shares, adjust the predicted ones for stock splits etc. using the CRSP share adjustment factor.
 ```sas
 proc sql;
 create table _tmp2 as
-select a.ticker, a.pends as fpedats, a.anndats, a.value as actval,
-       b.estimator as broker, b.analys, b.anndats as estdats, 
-       b.value as estval, c.permno
-from _tmp0 as a 
-left join _tmp1 as b
-  on a.ticker eq b.ticker and
+select a.ticker , a.pends as fpedats , a.anndats ,
+       a.value as actval , a.prc_act , a.adjfac_act ,
+       b.estimator as broker , b.analys , b.anndats as estdats ,
+       b.value as estval , b.adjfac_est , b.permno
+from _tmp02 as a , _tmp12 as b
+where a.ticker eq b.ticker and
      a.pends eq b.fpedats
-left join iclnk_uniperm as c
-  on a.ticker eq c.ticker
-order by a.ticker, a.pends
+order by a.ticker, a.pends , a.anndats , b.anndats
 ;
 quit;
-```
 
-5. Extract from CRSP daily stock file (`crsp.dsf`) the Cumulative Share Adjustment Factor for firm-years within the sample.
-```sas
-proc sort data = _tmp2 nodupkey out = permnos (keep = permno); 
-by permno; run; 
-
-proc sql; 
-create table dsf_short
-as select a.permno, a.date, a.prc, a.cfacshr 
-from crsp.dsf (where = (date ge "01jan&yr_beg."d)) as a , 
-     permnos as b
-where a.permno eq b.permno;
-quit; 
-```
-
-6. For each firm-fiscal year, find the latest stock price and share adjustment factor on/before the earnings announcement date.
-For each analyst's forecast, find the latest adjustment factor on/before the *forecast* announcement date.
-```sas
-proc sql;
-create table _tmp3 as
-select a.* , abs(b.prc) as prc_act, b.cfacshr as adjfac_act
-from _tmp2 as a left join dsf_short as b
-  on a.permno eq b.permno and 
-     intnx("week" , a.anndats , -1 , 'b') le b.date le a.anndats
-group by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
-having abs(a.anndats - b.date) eq min(abs(a.anndats - b.date))
-order by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
-;
-create table _tmp4 as
-select a.*, b.cfacshr as adjfac_est
-from _tmp3 as a left join dsf_short as b
-  on a.permno eq b.permno and 
-     intnx("week" , a.estdats , -1 , 'b') le b.date le a.estdats
-group by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
-having abs(a.estdats - b.date) eq min(abs(a.estdats - b.date))
-order by a.ticker, a.fpedats, a.broker, a.analys, a.estdats
-;
-quit;
-```
-
-7. Adjust for potential stock splits between forecast date and actual EPS announcement date using CRSP adjustment factor. 
-Make sure that estimated EPS is based on the same number of shares outstanding as the actual EPS.
-```sas
-data _tmp5; set _tmp4;
+data _tmp3; set _tmp2;
 if adjfac_est eq 0 then adjfac_est = 1;
 if adjfac_act eq 0 then adjfac_act = 1;
-estval_adj = estval / coalesce(adjfac_est , 1) 
-                    * coalesce(adjfac_act , 1);
+estval_adj = estval * coalesce(adjfac_act / adjfac_est , 1);
 drop adjfac: estval;
 run;
 ```
 
-8. For each firm-fiscal year, compute the number of analysts' forecast and the consensus forecast (i.e., mean/median of all analysts' forecast).
-Only consider those made within 9 months before the announcement date.
-(If needed, one can add other measures as well.)
+7. Compute a number of statistics for analysts' forecast, 
+including the number of analysts who made forecast in the 9 months prior to earnings announcement,
+and their mean (median) forecast.
+Also, compute the earnings-to-price ratio as well as two measures of (relative) forecast error.
 ```sas
 proc sql;
-create table _tmp6 as
-select ticker, permno, fpedats, anndats, actval, prc_act, count(*) as no_analys,
-       mean(estval_adj) as est_avg, median(estval_adj) as est_med
-from _tmp5 
+create table _tmp4 as
+select ticker , permno , fpedats , 
+       anndats , actval , prc_act , 
+       count(*) as num_analys ,
+       mean(estval_adj) as estavg , 
+       median(estval_adj) as estmed
+from _tmp3
 where intnx("mon" , anndats , -9 , 'b') le estdats lt anndats
 group by ticker, permno, fpedats, anndats, actval, prc_act
 ;
 quit;
+/* Sanity check: there should be only one observation for a given firm-fiscal period. */
 proc sort nodupkey; by ticker fpedats;
+run;
+
+data _tmp5; set _tmp4;
+epratio = actval / prc_act;
+ferr1 = (estavg - actval) / prc_act;
+ferr2 = (estmed - actval) / prc_act;
+run;
+```
+
+Finally, one can compute summary statistics for these measures.
+```sas
+proc means data = _tmp5
+  N mean median std skew kurt min p1 p5 p95 p99 max; 
+  var num_analys epratio ferr1 ferr2;
 run;
 ```
