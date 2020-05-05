@@ -149,7 +149,7 @@ quit;
 ```
 
 6. Merge analysts' forecast with actual EPS. 
-To ensure predicted and actual EPS are based on the same number of shares, adjust the predicted ones for stock splits etc. using the CRSP share adjustment factor.
+To ensure that predicted and actual EPS are based on the same number of shares outstanding, adjust the predicted ones for stock splits etc. using the CRSP share adjustment factor.
 ```sas
 proc sql;
 create table _tmp2 as
