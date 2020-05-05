@@ -60,7 +60,7 @@ proc sort nodupkey; by ticker pends pdicity;
 run;
 ```
 2. Extract from `ibes.detu_epsus` analysts' EPS forecast and apply a series of standard filters.
-The resulting data set `_tmp1` only covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
+The resulting data set `_tmp1` covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
 In this exercise, we only consider one-year-ahead forecasts (i.e., `fpi in ('1')`)
 Observations with missing *forecast* announcement dates or predicted EPS values are excluded.
 Each broker (`estimator`) may have multiple analysts (`analys`).
