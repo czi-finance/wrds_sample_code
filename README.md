@@ -59,7 +59,7 @@ keep ticker pends pdicity anndats value;
 proc sort nodupkey; by ticker pends pdicity;
 run;
 ```
-2. Extract from `ibes.detu_epsus` analysts' EPS forecast and apply a series of standard filters.
+2. Extract from `ibes.detu_epsus` analysts' EPS forecasts and apply a series of standard filters.
 The resulting data set `_tmp1` covers U.S. firms that report EPS in dollars and analysts who report predictions in dollars. 
 In this exercise, we only consider one-year-ahead forecasts (i.e., `fpi in ('1')`)
 Observations with missing *forecast* announcement dates or predicted EPS values are excluded.
@@ -127,7 +127,7 @@ order by a.ticker , a.pends , a.anndats
 quit;
 ```
 
-5. For each analyst forecast, obtain the latest share adjustment factor on/before the *forecast* announcement date.
+5. For each analysts' forecast, obtain the latest share adjustment factor on/before the *forecast* announcement date.
 ```sas
 proc sql;
 create table _tmp11 as
@@ -148,7 +148,7 @@ order by a.ticker , a.fpedats , a.estimator , a.analys , a.anndats
 quit;
 ```
 
-6. Merge analysts' forecast with actual EPS. 
+6. Merge analysts' forecasts with actual EPS. 
 To ensure that predicted and actual EPS are based on the same number of shares outstanding, adjust the predicted ones for stock splits etc. using the CRSP share adjustment factor.
 ```sas
 proc sql;
@@ -172,9 +172,9 @@ drop adjfac: estval;
 run;
 ```
 
-7. Compute a number of statistics for analysts' forecast, 
-including the number of analysts who made forecast in the 9 months prior to earnings announcement,
-and their mean (median) forecast.
+7. Compute a number of statistics for analysts' forecasts, 
+including the number of analysts who made forecasts in the 9 months prior to earnings announcement,
+and their mean (median) forecasts.
 Also, compute the earnings-to-price ratio as well as two measures of (relative) forecast error.
 ```sas
 proc sql;
