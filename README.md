@@ -38,7 +38,7 @@ Without further ado, let's dive into the code!
 Extract from `ibes.actu_epsus` the actual EPS data and apply a series of standard filters.
 The resulting data set `_tmp0` covers U.S. firms that report EPS in dollars. 
 In this exercise, we focus on annual EPS instead of quarterly one (i.e., `pdicity eq  "ANN"`).
-Observations with missing announcement dates or EPS values are excluded.
+Observations with missing announcement dates or EPS values are deleted.
 ```sas
 %let yr_beg = 1970;
 %let yr_end = 2020;
