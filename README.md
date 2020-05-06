@@ -14,7 +14,7 @@ I am happy to help!
 
 ### Table of Contents
 
-- [Track companies' fundamentals with variables/measures from financial statements]()
+- [Track companies' performance by computing variables/measures from financial statements]()
 - [Compare companies' actual earnings with analysts' forecasts](#ibes)
 
 <a name="ibes"></a>
