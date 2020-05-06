@@ -175,7 +175,7 @@ run;
 
 7. Compute a number of statistics for analysts' forecasts, 
 including the number of analysts who made forecasts in the 9 months prior to earnings announcement,
-and their mean (median) forecasts.
+and their mean (median) forecast.
 Also, compute the earnings-to-price ratio as well as two measures of (relative) forecast error.
 ```sas
 proc sql;
