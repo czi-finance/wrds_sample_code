@@ -150,6 +150,7 @@ quit;
 
 6. Merge analysts' forecasts with actual EPS. 
 To ensure that predicted and actual EPS are based on the same number of shares outstanding, adjust the predicted ones for stock splits etc. using the CRSP share adjustment factor.
+(For details, see [A Note on IBES Unadjusted Data](https://wrds-www.wharton.upenn.edu/pages/support/manuals-and-overviews/i-b-e-s/ibes-estimates/wrds-research-notes/note-ibes-unadjusted-data/).)
 ```sas
 proc sql;
 create table _tmp2 as
