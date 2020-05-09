@@ -14,7 +14,8 @@ I am happy to help!
 
 ### Table of Contents
 
-- [Track companies' performance by computing variables/measures from financial statements]()
+- [Analyze companies' financial performance over time]()
+- [Construct stock portfolios based on liquidity and momentum]()
 - [Compare companies' actual earnings with analysts' forecasts](#ibes)
 
 <a name="ibes"></a>
