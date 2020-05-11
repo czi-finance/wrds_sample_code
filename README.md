@@ -14,9 +14,12 @@ I am happy to help!
 
 ### Table of Contents
 
-- [Examine companies' financial performance over time]()
+- [Examine companies' financial performance over time](#comp)
 - [Construct stock portfolios based on liquidity and momentum]()
 - [Compare companies' actual earnings with analysts' forecasts](#ibes)
+
+<a name="comp"></a>
+## Examine companies' financial performance over time
 
 <a name="ibes"></a>
 ## Compare companies' actual earnings with analysts' forecasts
