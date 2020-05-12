@@ -21,6 +21,16 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
+```sas
+%let yr_beg = 1978;
+%let yr_end = 2018;
+%let funda_filter = ((indfmt eq "INDL") and (consol eq 'C') and
+                     (popsrc eq 'D') and (datafmt eq "STD") and
+                     (fic eq "USA") and (at gt 0) and (sale gt 0));
+%let funda_fncd_filter = ((indfmt eq "INDL") and (consol eq 'C') and
+                          (popsrc eq 'D') and (datafmt eq "STD"));
+```
+
 <a name="ibes"></a>
 ## Compare companies' actual earnings with analysts' forecasts
 
