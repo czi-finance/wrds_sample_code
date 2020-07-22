@@ -80,7 +80,7 @@ Observations with missing *forecast* announcement dates or predicted EPS values 
 Each broker (`estimator`) may have multiple analysts (`analys`).
 Some EPS are on a primary basis while others on a diluted basis, as indicated by `pdf`.
 An analyst may make multiple forecasts throughout the period before the actual EPS announcement. 
-For each analyst, only her last forecasts before EPS announcements are considered. 
+For each analyst, only her last forecast before an EPS announcement is included. 
 Alternatively, one can change the last line of code to keep the latest forecast from a given analyst made on a given date.
 (Yes, analysts may report multiple forecasts on a given date.)
 ```sas
