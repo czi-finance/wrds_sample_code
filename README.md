@@ -21,14 +21,46 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
+1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
+Obtain a complete list of covered companies, and construct a *balanced* panel that spans the full sample period without time gap.
 ```sas
-%let yr_beg = 1978;
+%let yr_beg = 1978; 
 %let yr_end = 2018;
 %let funda_filter = ((indfmt eq "INDL") and (consol eq 'C') and
                      (popsrc eq 'D') and (datafmt eq "STD") and
-                     (fic eq "USA") and (at gt 0) and (sale gt 0));
+                     (fic eq "USA") and (curncd eq "USD") and 
+                     (curcd eq "USD") and not missing(at));
 %let funda_fncd_filter = ((indfmt eq "INDL") and (consol eq 'C') and
                           (popsrc eq 'D') and (datafmt eq "STD"));
+%let secm_filter = (primiss eq 'P' and fic eq "USA" and curcdm eq "USD");
+%let comp_sample_period = (&yr_beg. le fyear le &yr_end.);
+%let secm_sample_period = ("01jan&yr_beg."d le datadate le "31dec&yr_end."d);;
+
+/* panel variable: gvkey; time variable: fyear and datadate */
+%let names_vars = gvkey conm sic naics;
+%let funda_keys = gvkey datadate fyear;
+%let funda_vars = sich naicsh at sale csho prcc_f seq ceq lct lt
+                  dltt mib txditc txdb itcb pstk pstkrv pstkl lo
+                  dlc cogs xsga revt xint ebitda
+;
+
+proc sort data = comp.names nodupkey
+  out = _tmp0 (keep = &names_vars.);
+by gvkey;
+%let nyr = %eval(&yr_end. - &yr_beg.);
+data _tmp0; set _tmp0;
+yr_0 = &yr_beg.;
+array yr {&nyr.} yr_1 - yr_&nyr.;
+do i = 1 to &nyr.;
+  yr(i) = yr_0 + i;
+end;
+drop i;
+proc transpose data = _tmp0 
+  out = _tmp1 (rename = (col1 = fyear)
+               drop = _name_);
+by &names_vars.;
+var yr_0 - yr_&nyr.;
+run;
 ```
 
 <a name="ibes"></a>
