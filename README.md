@@ -76,6 +76,8 @@ run;
 ```
 
 3. Add to the *Panel* the relevant financial statements' items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
+For each firm, exclude the preceding and trailing null observations---that is, those earlier (later) than the first (last) available observations.
+(This renders the *Panel* unbalanced, but significantly reduces its size.)
 Note that alternative definitions are used to minimize the instances of missing value. 
 Besides, (preliminary) sanity checks are conducted when defining variables.
 ```sas
