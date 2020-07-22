@@ -21,9 +21,20 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
+In this program, I build from [Compustat](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=60) a data set that contains various measures calculated from companies' financial statements.
+It can be used to track and study the performance of one or more companies over time. 
+As an illustration, I plot two figures below using this data. 
+The first one shows the market leverage, asset turnover, and profit margin for **Tesla Inc.** over the past five years.
+The second figure displays asset and sales growth as well as market-to-book ratio for assets. 
+One can see that Tesla's leverage increased in 2016 but has remained stable since then. 
+Its asset turnover increased significantly in 2018/9, and the profit margin also turned positive.
+Its book assets almost doubled in 2016, driven mostly by the acquisition of *SolarCity*. 
+Nonetheless, its asset growth and sales growth have always been strong; the latter only slipped slightly in 2019.
+The market valuation of the company remained high, with market value of assets more than three times the book value.
+
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="365">   
 
-
+Without further ado, let's dive into the code!
 
 
 1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
