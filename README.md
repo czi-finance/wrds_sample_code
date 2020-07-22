@@ -175,8 +175,8 @@ proc sort nodupkey; by gvkey fyear;
 run;
 ```
 
-6. *(optional)* Add to the *Panel* companies' sales to each major customers (which is reported in `comp.seg_customer`).
-Here I use the U.S. government as an example: I compute firms' total sales to federal, state, and local governments.
+6. *(optional)* Add to the *Panel* companies' sales to major customers (which is reported in `comp.seg_customer`).
+Here I use the U.S. government as an example: I compute firms' total sales to federal, state, and local governments combined.
 ```sas
 proc sql;
 create table _tmp41 as
