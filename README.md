@@ -29,7 +29,7 @@ The second figure displays asset and sales growth as well as market-to-book rati
 
 One can see that Tesla's leverage increased in 2016 but has remained stable since then. 
 Its asset turnover increased significantly in 2018/9, and the profit margin also turned positive.
-Its book assets almost doubled in 2016, driven mostly by the acquisition of *SolarCity*. 
+Its book assets almost tripled in 2016, driven mostly by the acquisition of *SolarCity*. 
 Nonetheless, its asset growth and sales growth have always been strong; the latter only slipped slightly in 2019.
 The market valuation of the company remained high, with market value of assets more than three times the book value.
 
