@@ -77,7 +77,7 @@ run;
 
 3. Add to the *Panel* the relevant financial statements' items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
 Note that alternative definitions are used to minimize the instances of missing value. 
-Also, conduct sanity checks when defining variables.
+Besides, (preliminary) sanity checks are conducted when defining variables.
 ```sas
 proc sql;
 create table _tmp11 (drop = _gvkey _fyear) as
