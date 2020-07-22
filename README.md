@@ -199,8 +199,10 @@ proc sort nodupkey; by gvkey fyear;
 run;
 ```
 Note that I use `left join` when adding new variables to the *Panel*, and then check whether the uniqueness of the key is preserved.
-I believe this is a good practice to avoid unintentionally duplicating or dropping observations when merging data.
+I believe this is a good practice that helps prevent unintentionally duplicating or deleting observations when one merges data.
 It also helps reveal bugs if there is any.
+
+
 
 <a name="ibes"></a>
 ## Compare companies' actual earnings with analysts' forecasts
