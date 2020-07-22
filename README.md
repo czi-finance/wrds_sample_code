@@ -116,7 +116,7 @@ run;
 
 4. Complement the market value of equity using information from the monthly security file (`comp.secm`).
 Consider only the primary equity issue of a company:
-use its market capitalization at the end of a fiscal year (or the following quarter end if the former is unavailable) to represent the market value of equity.
+use its market capitalization at the end of a fiscal year (or the following quarter-end if the former is unavailable) to represent the market value of equity.
 ```sas
 data _tmp21;
 keep gvkey datadate me_secm;
