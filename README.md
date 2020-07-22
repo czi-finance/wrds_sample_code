@@ -21,8 +21,8 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
-1. Begin by defining a set of macro variables that indicate the sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
-Obtain a complete list of covered companies (from `comp.names`), and construct a *balanced* panel that spans the full sample period without time gap.
+1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
+Obtain a complete list of covered companies, and construct a *balanced* panel (which I will refer to as the *Panel* hereafter) that spans the full sample period without time gap.
 ```sas
 %let yr_beg = 1978; 
 %let yr_end = 2018;
@@ -60,6 +60,58 @@ proc transpose data = _tmp0
                drop = _name_);
 by &names_vars.;
 var yr_0 - yr_&nyr.;
+run;
+```
+
+2. Extract only the valid records and the relevant data items from the Fundamental Annual file (which itself is too large to handle) for the given sample period.
+Here, only US firms with non-missing book value of assets are included.
+It is important to do a sanity check whether the pair of `gvkey` and `datadate` uniquely identify observations.
+```sas
+data funda_short; set comp.funda;
+where &comp_sample_period. and
+      &funda_filter.;
+keep &funda_keys. &funda_vars.;
+proc sort nodupkey; by gvkey datadate;
+run;
+```
+
+3. Add to the *Panel* the relevant financial statements' items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
+Note that alternative definitions are used to minimize the instances of missing value. 
+Also, conduct sanity checks when defining variables.
+Lastly, check whether `(gvkey, fyear)` uniquely identify observations.
+```sas
+proc sql;
+create table _tmp11 (drop = _gvkey _fyear) as
+select a.* , b.*
+from _tmp1 as a 
+left join funda_short (rename = (gvkey = _gvkey fyear = _fyear)) as b
+  on a.gvkey eq b._gvkey and a.fyear eq b._fyear
+group by gvkey
+having min(_fyear) le fyear le max(_fyear)
+;
+quit;
+proc sort; by gvkey fyear datadate;
+data _tmp2;
+format gvkey fyear datadate conm sic;
+keep gvkey fyear datadate conm
+     sic at sale be me bd to pm;
+set _tmp11; by gvkey fyear datadate;
+/* if last.fyear; */
+sic = coalescec(put(sich,4.) , sic);
+/* naics = coalesce(naicsh , naics); */
+/* naics3 = substr(put(naics , 6. -l) , 1 , 3); */
+sale = ifn(missing(sale) , revt , sale);
+be = coalesce(seq , sum(ceq , pstk) , sum(at - lt , -mib))
+     + coalesce(txditc , sum(txdb , itcb) ,
+                lt - lct - lo - dltt , 0)
+     - coalesce(pstkrv , pstkl , pstk , 0);
+be = ifn(be>0 , be , .);
+me = prcc_f * csho; me = ifn(me>0,me,.);
+bd = dlc + dltt;
+to = sale / ifn(at>0,at,.);
+pm = ebitda / ifn(sale>0,sale,.);
+/* check uniqueness of the key */
+proc sort nodupkey; by gvkey fyear; 
 run;
 ```
 
