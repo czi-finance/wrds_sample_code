@@ -21,6 +21,11 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
+<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="400">
+<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="400">   
+
+
+
 1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
 Obtain a complete list of covered companies, and construct a *balanced* panel (which I will refer to as the *Panel* hereafter) that spans the full sample period without time gap.
 ```sas
