@@ -21,8 +21,8 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
-<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="400">
-<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="400">   
+<img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="400"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="400">   
+
 
 
 
