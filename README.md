@@ -21,8 +21,8 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
-1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
-Obtain a complete list of covered companies, and construct a *balanced* panel that spans the full sample period without time gap.
+1. Begin by defining a set of macro variables that indicate the sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
+Obtain a complete list of covered companies (from `comp.names`), and construct a *balanced* panel that spans the full sample period without time gap.
 ```sas
 %let yr_beg = 1978; 
 %let yr_end = 2018;
