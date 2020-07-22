@@ -64,7 +64,7 @@ run;
 ```
 
 2. Extract only the valid records and the relevant data items from the Fundamental Annual file (which itself is too large to handle) for the given sample period.
-Here, only US firms with non-missing book value of assets are included.
+Here, only U.S. firms with non-missing book value of assets are included.
 It is important to do a sanity check whether the pair of `gvkey` and `datadate` uniquely identify observations.
 ```sas
 data funda_short; set comp.funda;
@@ -78,7 +78,6 @@ run;
 3. Add to the *Panel* the relevant financial statements' items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
 Note that alternative definitions are used to minimize the instances of missing value. 
 Also, conduct sanity checks when defining variables.
-Lastly, check whether `(gvkey, fyear)` uniquely identify observations.
 ```sas
 proc sql;
 create table _tmp11 (drop = _gvkey _fyear) as
@@ -114,6 +113,92 @@ pm = ebitda / ifn(sale>0,sale,.);
 proc sort nodupkey; by gvkey fyear; 
 run;
 ```
+
+4. Complement the market value of equity using information from the monthly security file (`comp.secm`).
+Consider only the primary equity issue of a company:
+use its market capitalization at the end of a fiscal year (or the following quarter end if the former is unavailable) to represent the market value of equity.
+```sas
+data _tmp21;
+keep gvkey datadate me_secm;
+set comp.secm;
+where &secm_filter. and
+      &secm_sample_period.;
+me_secm = prccm * cshoq;
+rename datadate = mdate;
+if not missing(me_secm);
+/* check uniqueness of the key */
+proc sort nodupkey; by gvkey mdate; 
+run;
+
+proc sql;
+create table _tmp22 as
+select a.gvkey , a.fyear , a.datadate ,
+       b.mdate , b.me_secm
+from _tmp2 as a
+left join _tmp21 as b
+  on a.gvkey eq b.gvkey and
+     0 le intck('mon' , a.datadate , b.mdate) le 3
+order by a.gvkey , a.fyear , a.datadate , b.mdate
+;
+quit;
+proc transpose data = _tmp22 out = _tmp23 (drop = _name_)
+  prefix = me_secm; 
+var me_secm;
+by gvkey fyear datadate; 
+data _tmp3;
+drop me_secm me_secm1 - me_secm2;
+merge _tmp2 _tmp23;
+by gvkey fyear datadate;
+me_secm = coalesce(of me_secm1 - me_secm2);
+me = coalesce(me , me_secm); me = ifn(me>0,me,.);
+proc sort nodupkey; by gvkey fyear; 
+run;
+```
+
+5. Obtain the footnotes for certain data items from the Fundamental Annual Footnote file. 
+They can be used to identify and filter out abnormal item value caused by some extraordinary corporate actions/events (e.g., M&A, spin-off, bankruptcy, etc.).
+```sas
+proc sql;
+create table _tmp4 as
+select a.* , b.at_fn , b.sale_fn
+from _tmp3 as a
+left join 
+  (select * from comp.funda_fncd
+   where &comp_sample_period. 
+   and &funda_fncd_filter.) as b
+  on a.gvkey eq b.gvkey and
+     a.fyear eq b.fyear and
+     a.datadate eq b.datadate
+;
+quit;
+proc sort nodupkey; by gvkey fyear; 
+run;
+```
+
+6. *(optional)* Add to the *Panel* companies' sales to each major customers (which is reported in `comp.seg_customer`).
+Here I use the U.S. government as an example: I compute firms' total sales to federal, state, and local governments.
+```sas
+proc sql;
+create table _tmp41 as
+select gvkey , datadate , sum(salecs) as sale_gov
+from comp.seg_customer
+where ctype in ('GOVDOM' , 'GOVSTATE' , 'GOVLOC')
+group by gvkey , datadate
+;
+create table _tmp5 as
+select a.* , b.sale_gov
+from _tmp4 as a
+left join _tmp41 as b
+on a.gvkey eq b.gvkey and
+   a.datadate eq b.datadate
+;
+quit;
+proc sort nodupkey; by gvkey fyear; 
+run;
+```
+Note that I use `left join` when adding new variables to the *Panel*, and then check whether the uniqueness of the key is preserved.
+I believe this is a good practice to avoid unintentionally duplicating or dropping observations when merging data.
+It also helps reveal bugs if there is any.
 
 <a name="ibes"></a>
 ## Compare companies' actual earnings with analysts' forecasts
