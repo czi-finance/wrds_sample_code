@@ -198,9 +198,6 @@ quit;
 proc sort nodupkey; by gvkey fyear; 
 run;
 ```
-Note that I use `left join` when adding new variables to the *Panel*, and then check whether the uniqueness of the key is preserved.
-I believe this is a good practice that helps prevent unintentionally duplicating or deleting observations when one merges data.
-It also helps reveal bugs if there is any.
 
 7. One can export the *Panel* in different formats (e.g., .dta, .csv) for subsequent analyses. 
 For example, I use `_tmp5` in Stata to plot the two figures above.
@@ -208,6 +205,11 @@ For example, I use `_tmp5` in Stata to plot the two figures above.
 %let FFP = "[The Path to Your Output Folder]/comp_funda_clean.dta";
 proc export data = _tmp5 outfile = &FFP. replace; run;
 ```
+Note that I use `left join` when adding new variables to the *Panel*, and then check whether the uniqueness of the key is preserved.
+I believe this is a good practice that helps prevent unintentionally duplicating or deleting observations when one merges data.
+It also helps reveal bugs if there is any.
+
+
 
 <a name="ibes"></a>
 ## Compare companies' actual earnings with analysts' forecasts
