@@ -26,6 +26,7 @@ It can be used to track and study the performance of one or more companies over 
 As an illustration, I plot two figures below using this data. 
 The first one shows the market leverage, asset turnover, and profit margin for **Tesla Inc.** over the past five years.
 The second figure displays asset and sales growth as well as market-to-book ratio for assets. 
+
 One can see that Tesla's leverage increased in 2016 but has remained stable since then. 
 Its asset turnover increased significantly in 2018/9, and the profit margin also turned positive.
 Its book assets almost doubled in 2016, driven mostly by the acquisition of *SolarCity*. 
