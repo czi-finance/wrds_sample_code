@@ -27,8 +27,14 @@ As an illustration, I plot two figures below using this data.
 The first one shows the market leverage, asset turnover, and profit margin for **Tesla Inc.** (`gvkey = 184996`) over the past five years.
 The second figure displays its asset and sales growth as well as the market-to-book (assets) ratio. 
 
-One can see that Tesla's leverage increased in 2016 but has remained stable since then. 
-Its asset turnover increased significantly in 2018/9, and the profit margin also turned positive.
+Tesla did not use much leverage in the past five years.
+Its market leverage was about 8 percent in the 2015 fiscal year.
+That number increased to around 17 percent in 2016 and remained there ever since.
+Tesla's asset turnover declined from 50 percent in 2015 to roughly 30-40 percent in 2016/7. 
+That number climbed back and reached more than 70 percent in 2018/9, suggesting that Tesla has become more effective in generating sales.
+That said, Tesla has not been good at generating profit.
+Its profit margin was almost zero in 2015-17. 
+It only edged up to about 8 percent in 2018/9.
 Its book assets almost tripled in 2016, driven mostly by the acquisition of *SolarCity*. 
 Nonetheless, its asset growth and sales growth have always been strong; the latter only slipped somewhat in 2019.
 The market valuation of the company is high, with the market value of assets almost three times the book value.
