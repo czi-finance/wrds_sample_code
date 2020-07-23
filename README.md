@@ -25,7 +25,7 @@ In this program, I build from [Compustat](https://wrds-web.wharton.upenn.edu/wrd
 It can be used to track and study the performance of one or more companies over time. 
 As an illustration, I plot two figures below using this data. 
 The first one shows the market leverage, asset turnover, and profit margin for **Tesla Inc.** (`gvkey = 184996`) over the past five years.
-The second figure displays asset and sales growth as well as market-to-book (assets) ratio. 
+The second figure displays its asset and sales growth as well as the market-to-book (assets) ratio. 
 
 One can see that Tesla's leverage increased in 2016 but has remained stable since then. 
 Its asset turnover increased significantly in 2018/9, and the profit margin also turned positive.
