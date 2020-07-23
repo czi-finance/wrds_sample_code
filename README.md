@@ -37,11 +37,11 @@ It has a zero to negative profit margin in 2015-17.
 That number only edged up to about 8 percent in 2018/9, finally turning a profit.
 Tesla's book value of assets almost tripled in 2016, which is driven largely by the acquisition of *SolarCity*.
 But it has been growing rapidly nonetheless:
-Its assets grew by 38 and 26 percent in 2015 and 2017, respectively; that number slipped to 4 and 15 percent in 2018 and 19, respectively.
+Its assets grew by 38 and 26 percent in 2015 and 2017, respectively; that number slipped to 4 and 15 percent in 2018 and 2019, respectively.
 Tesla's sales also increased rapidly.
 In particular, its annual sales grew by 73, 68, and 83 percent in 2016, 2017, and 2018, respectively.
 But that number declined to less than 15 percent in 2019.
-Before the acquisition of *SolarCity*, Tesla's market value of assets was five times its book value, while after the acquisition, that number declined to around three, which is still a pretty high valuation.
+Before the acquisition of *SolarCity*, Tesla's market value of assets was five times its book value, while after the acquisition, that number declined to around three, which is still a pretty high valuation though.
 
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="365">   
 
