@@ -34,7 +34,7 @@ Tesla's asset turnover declined from 50 percent in 2015 to roughly 30-40 percent
 That number climbed back and reached more than 70 percent in 2018/9, suggesting that Tesla has become more effective in generating sales.
 That said, Tesla has not been good at generating profit.
 It has a zero to negative profit margin in 2015-17.
-It only edged up to about 8 percent in 2018/9.
+That number only edged up to about 8 percent in 2018/9.
 Its book assets almost tripled in 2016, driven mostly by the acquisition of *SolarCity*. 
 Nonetheless, its asset growth and sales growth have always been strong; the latter only slipped somewhat in 2019.
 The market valuation of the company is high, with the market value of assets almost three times the book value.
