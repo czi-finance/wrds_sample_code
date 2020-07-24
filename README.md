@@ -210,7 +210,7 @@ Here I use the U.S. government as an example: I compute firms' total sales to fe
 proc sql;
 create table _tmp41 as
 select gvkey , datadate , sum(salecs) as sale_gov
-from comp.seg_customer
+from compsegd.seg_customer
 where ctype in ('GOVDOM' , 'GOVSTATE' , 'GOVLOC')
 group by gvkey , datadate
 ;
