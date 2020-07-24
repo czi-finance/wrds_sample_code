@@ -213,6 +213,7 @@ select gvkey , datadate , sum(salecs) as sale_gov
 from compsegd.seg_customer
 where ctype in ('GOVDOM' , 'GOVSTATE' , 'GOVLOC')
 group by gvkey , datadate
+having sale_gov gt 0
 ;
 create table _tmp5 as
 select a.* , b.sale_gov
