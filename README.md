@@ -15,7 +15,7 @@ I am happy to help!
 ### Table of Contents
 
 - [Examine companies' financial performance over time](#comp)
-- [Construct stock portfolios based on liquidity and momentum]()
+- [Construct stock portfolios based on various characteristics](#crsp)
 - [Compare companies' actual earnings with analysts' forecasts](#ibes)
 
 <a name="comp"></a>
@@ -239,7 +239,8 @@ Note that I use `left join` when adding new variables to the *Panel*, and then c
 I believe this is a good practice that helps prevent unintentionally duplicating or deleting observations when one merges data.
 It also helps reveal bugs if there is any.
 
-
+<a name="crsp"></a>
+## Construct stock portfolios based on various characteristics
 
 <a name="ibes"></a>
 ## Compare companies' actual earnings with analysts' forecasts
