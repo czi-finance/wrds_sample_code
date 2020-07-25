@@ -156,5 +156,5 @@ proc datasets library = work nolist; save &output_ds.; run;
 
 %comp_funda_clean (output_ds = comp_funda_clean);
 
-%let FFP = "/home/uiuc/chaozi/COMP-CRSP/data/comp_funda_clean.dta";
+%let FFP = "[...]/comp_funda_clean.dta";
 proc export data = comp_funda_clean outfile = &FFP. replace; run;
