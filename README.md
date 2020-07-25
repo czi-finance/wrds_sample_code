@@ -180,7 +180,9 @@ merge _tmp2 _tmp23;
 by gvkey fyear datadate;
 me_secm = coalesce(of me_secm1 - me_secm2);
 me = coalesce(me , me_secm); me = ifn(me>0,me,.);
-proc sort nodupkey; by gvkey fyear; 
+if bd gt 0 then ml = bd / (me + bd);
+if at gt 0 then mb = (at - be + me) / at;
+proc sort nodupkey; by gvkey fyear;
 run;
 ```
 
