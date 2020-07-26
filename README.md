@@ -199,7 +199,6 @@ left join
    where &comp_sample_period. 
    and &funda_fncd_filter.) as b
   on a.gvkey eq b.gvkey and
-     a.fyear eq b.fyear and
      a.datadate eq b.datadate
 ;
 quit;
