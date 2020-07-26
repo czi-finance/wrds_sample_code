@@ -217,7 +217,7 @@ where ctype in ('GOVDOM' , 'GOVSTATE' , 'GOVLOC')
 group by gvkey , datadate
 having sale_gov gt 0
 ;
-create table _tmp5 as
+create table comp_funda_clean as
 select a.* , b.sale_gov
 from _tmp4 as a
 left join _tmp41 as b
@@ -230,10 +230,10 @@ run;
 ```
 
 7. One can export the *Panel* in different formats (e.g., .dta, .csv) for subsequent analyses. 
-For example, I use `_tmp5` in Stata to plot the two figures above.
+For example, I use `comp_funda_clean` in Stata to plot the two figures above.
 ```sas
 %let FFP = "[The Path to Your Output Folder]/comp_funda_clean.dta";
-proc export data = _tmp5 outfile = &FFP. replace; run;
+proc export data = comp_funda_clean outfile = &FFP. replace; run;
 ```
 Note that I use `left join` when adding new variables to the *Panel*, and then check whether the uniqueness of the key is preserved.
 I believe this is a good practice that helps prevent unintentionally duplicating or deleting observations when one merges data.
