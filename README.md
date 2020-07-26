@@ -125,7 +125,7 @@ keep gvkey fyear datadate conm
      sic at sale be me bd to pm;
 set _tmp11; by gvkey fyear datadate;
 /* if last.fyear; */
-sic = coalescec(put(sich,z4.) , sic);
+if not missing(sich) then sic = put(sich,z4.);
 /* naics = coalesce(naicsh , naics); */
 /* naics3 = substr(put(naics , 6. -l) , 1 , 3); */
 sale = ifn(missing(sale) , revt , sale);
