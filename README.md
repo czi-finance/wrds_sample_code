@@ -110,9 +110,8 @@ Besides, (preliminary) sanity checks are conducted when defining variables.
 ```sas
 proc sql;
 create table _tmp11 (drop = _gvkey _fyear) as
-select a.* , b.*
-from _tmp1 as a 
-left join funda_short (rename = (gvkey = _gvkey fyear = _fyear)) as b
+select a.* , b.* from _tmp1 as a left join 
+  funda_short (rename = (gvkey = _gvkey fyear = _fyear)) as b
   on a.gvkey eq b._gvkey and a.fyear eq b._fyear
 group by gvkey
 having min(_fyear) le fyear le max(_fyear)
@@ -121,23 +120,24 @@ quit;
 proc sort; by gvkey fyear datadate;
 data _tmp2;
 format gvkey fyear datadate conm sic;
-keep gvkey fyear datadate conm
-     sic at sale be me bd to pm;
+keep gvkey fyear datadate conm sic
+     at sale be me bd to pm ib PnI;
 set _tmp11; by gvkey fyear datadate;
 /* if last.fyear; */
-if not missing(sich) then sic = put(sich,z4.);
+if not missing(sich) then sic = put(sich , z4.);
 /* naics = coalesce(naicsh , naics); */
 /* naics3 = substr(put(naics , 6. -l) , 1 , 3); */
 sale = ifn(missing(sale) , revt , sale);
+/*************** VARIABLE DEFINITION ***************/
 be = coalesce(seq , sum(ceq , pstk) , sum(at - lt , -mib))
      + coalesce(txditc , sum(txdb , itcb) ,
                 lt - lct - lo - dltt , 0)
      - coalesce(pstkrv , pstkl , pstk , 0);
-be = ifn(be>0 , be , .);
 me = prcc_f * csho; me = ifn(me>0,me,.);
 bd = dlc + dltt;
 to = sale / ifn(at>0,at,.);
-pm = ebitda / ifn(sale>0,sale,.);
+pm = coalesce(oiadp , oibdp-dp) / ifn(sale>0,sale,.);
+PnI = sum(ppegt , invt);
 /* check uniqueness of the key */
 proc sort nodupkey; by gvkey fyear; 
 run;
