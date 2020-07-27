@@ -181,7 +181,6 @@ me_secm = coalesce(of me_secm1 - me_secm2);
 me = coalesce(me , me_secm); me = ifn(me>0,me,.);
 /*************** VARIABLE DEFINITION ***************/
 if bd gt 0 then ml = bd / (me + bd);
-if at gt 0 then mb = (at - be + me) / at;
 bm = be / me;
 proc sort nodupkey; by gvkey fyear; 
 run;
