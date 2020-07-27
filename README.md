@@ -163,8 +163,7 @@ proc sql;
 create table _tmp22 as
 select a.gvkey , a.fyear , a.datadate ,
        b.mdate , b.me_secm
-from _tmp2 as a
-left join _tmp21 as b
+from _tmp2 as a left join _tmp21 as b
   on a.gvkey eq b.gvkey and
      0 le intck('mon' , a.datadate , b.mdate) le 3
 order by a.gvkey , a.fyear , a.datadate , b.mdate
@@ -180,10 +179,11 @@ merge _tmp2 _tmp23;
 by gvkey fyear datadate;
 me_secm = coalesce(of me_secm1 - me_secm2);
 me = coalesce(me , me_secm); me = ifn(me>0,me,.);
+/*************** VARIABLE DEFINITION ***************/
 if bd gt 0 then ml = bd / (me + bd);
 if at gt 0 then mb = (at - be + me) / at;
 bm = be / me;
-proc sort nodupkey; by gvkey fyear;
+proc sort nodupkey; by gvkey fyear; 
 run;
 ```
 
