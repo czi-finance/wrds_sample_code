@@ -72,7 +72,8 @@ Obtain a complete list of covered companies, and construct a *balanced* panel (w
 %let funda_keys = gvkey datadate fyear;
 %let funda_vars = sich naicsh at sale csho prcc_f seq ceq lct lt
                   dltt mib txditc txdb itcb pstk pstkrv pstkl lo
-                  dlc cogs xsga revt xint ebitda
+                  dlc cogs xsga revt xint ebitda oiadp oibdp dp
+                  ppegt invt ib
 ;
 
 proc sort data = comp.names nodupkey
