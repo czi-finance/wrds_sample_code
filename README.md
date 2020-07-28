@@ -41,7 +41,7 @@ Its assets grew by 38 and 26 percent in 2015 and 2017, respectively; that number
 Tesla's sales also increased rapidly.
 In particular, its annual sales grew by 73, 68, and 83 percent in 2016, 2017, and 2018, respectively.
 But that number declined to less than 15 percent in 2019.
-Before the acquisition of *SolarCity*, Tesla's market value of assets was five times its book value, while after the acquisition, that number declined to around three, which is still a pretty high valuation though.
+Before the acquisition of *SolarCity*, Tesla's market value of assets was five times its book value, while after the acquisition, that number declined to around three (still a pretty high valuation though).
 
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="365">
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/compare2.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/compare1.png" width="365">
