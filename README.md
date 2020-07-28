@@ -47,7 +47,7 @@ Before the acquisition of *SolarCity*, Tesla's market value of assets was five t
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/compare2.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/compare1.png" width="365">
 
 In comparison, Ford and GM used much more leverage: about 70-80 percent for the former, and around 60 percent for the latter.
-And their sales growth seem to have stagnated, with both hovering around zero. 
+But their sales growth seem to have stagnated, with both hovering around zero. 
 
 Without further ado, let's dive into the code!
 
