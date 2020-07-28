@@ -52,7 +52,7 @@ But their growth seem to have stagnated, with both firms' sales growth hovering 
 Without further ado, let's dive into the code!
 
 
-1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1978 to 2018), data filters, and variables to be included.
+1. Begin by defining a set of macro variables that indicate sample period (e.g., from 1950 to 2019), data filters, and financial statement items to include.
 Obtain a complete list of covered companies, and construct a *balanced* panel (which I will refer to as the *Panel* hereafter) that spans the full sample period without time gap.
 ```sas
 %let yr_beg = 1950; 
@@ -94,9 +94,9 @@ var yr_0 - yr_&nyr.;
 run;
 ```
 
-2. Extract only the valid records and the relevant data items from the Fundamental Annual file (which itself is too large to handle) for the given sample period.
-Here, only U.S. firms with non-missing book value of assets are included.
-It is important to do a sanity check whether the pair of `gvkey` and `datadate` uniquely identify observations.
+2. Extract only the valid records and the relevant items from the Fundamental Annual file for the given sample period.
+Here, only U.S. firm-years with non-missing book value of assets are included.
+It is important to do a sanity check and see whether the pair of `gvkey` and `datadate` uniquely identify observations.
 ```sas
 data funda_short; set comp.funda;
 where &comp_sample_period. and
@@ -106,9 +106,9 @@ proc sort nodupkey; by gvkey datadate;
 run;
 ```
 
-3. Add to the *Panel* the relevant financial statements' items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
-For each firm, exclude the preceding and trailing null observations---that is, those earlier (later) than the first (last) available observations.
-(This renders the *Panel* unbalanced, but significantly reduces its size.)
+3. Add to the *Panel* the relevant financial statement items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
+For each firm, exclude the preceding and trailing null observations---that is, those earlier (later) than the first (last) available record.
+(This makes the *Panel* unbalanced, but significantly reduces its size.)
 Note that alternative definitions are used to minimize the instances of missing value. 
 Besides, (preliminary) sanity checks are conducted when defining variables.
 ```sas
@@ -191,7 +191,7 @@ run;
 ```
 
 5. Obtain the footnotes for certain data items from the Fundamental Annual Footnote file. 
-They can be used to identify and filter out abnormal item value caused by some extraordinary corporate actions/events (e.g., M&A, spin-off, bankruptcy, etc.).
+They can be used to identify and filter outliers caused by some extraordinary corporate actions/events (e.g., M&A, spin-off, bankruptcy, etc.).
 ```sas
 proc sql;
 create table _tmp4 as
@@ -209,7 +209,7 @@ proc sort nodupkey; by gvkey fyear;
 run;
 ```
 
-6. *(optional)* Add to the *Panel* companies' sales to major customers (which is reported in `comp.seg_customer`).
+6. *(optional)* Add to the *Panel* companies' sales to major customers (which is reported in `compsegd.seg_customer`).
 Here I use the U.S. government as an example: I compute firms' total sales to federal, state, and local governments combined.
 ```sas
 proc sql;
@@ -232,8 +232,8 @@ proc sort nodupkey; by gvkey fyear;
 run;
 ```
 
-7. One can export the *Panel* in different formats (e.g., .dta, .csv) for subsequent analyses. 
-For example, I use `comp_funda_clean` in Stata to plot the two figures above.
+7. One can export the *Panel* in different formats (e.g., .dta, .csv) for any subsequent analysis. 
+For example, I use `comp_funda_clean` in Stata to plot those figures above.
 ```sas
 %let FFP = "[The Path to Your Output Folder]/comp_funda_clean.dta";
 proc export data = comp_funda_clean outfile = &FFP. replace; run;
