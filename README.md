@@ -30,11 +30,11 @@ The second figure displays its asset and sales growth as well as the market-to-b
 Tesla did not use much leverage in the past five years.
 Its market leverage was about 8 percent in the 2015 fiscal year.
 That number increased to around 17 percent in 2016 and remained there ever since.
-Tesla's asset turnover declined from 50 percent in 2015 to roughly 30-40 percent in 2016/7. 
-That number climbed back and reached more than 70 percent in 2018/9, suggesting that Tesla has become more effective in generating sales.
+Tesla's asset turnover declined from 50 percent in 2015 to roughly 30-40 percent in 2016-17. 
+That number climbed back and reached more than 70 percent in 2018-19, suggesting that Tesla has become more effective in generating sales.
 That said, Tesla has not been good at generating profit.
-It has a zero to negative profit margin in 2015-17.
-That number only edged up to about 8 percent in 2018/9, finally turning a profit.
+It has a negative profit margin in 2015-18.
+That number only turned positive in 2019.
 Tesla's book value of assets almost tripled in 2016, which is driven largely by the acquisition of *SolarCity*.
 But it has been growing rapidly nonetheless:
 Its assets grew by 38 and 26 percent in 2015 and 2017, respectively; that number slipped to 4 and 15 percent in 2018 and 2019, respectively.
@@ -45,6 +45,9 @@ Before the acquisition of *SolarCity*, Tesla's market value of assets was five t
 
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla1.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/tsla2.png" width="365">
 <img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/compare2.png" width="365"><img src="https://github.com/cziFinEcon/wrds_sample_code/blob/master/fig/compare1.png" width="365">
+
+In comparison, Ford and GM used much more leverage: about 70-80 percent for the former, and around 60 percent for the latter.
+And their sales growth seem to have stagnated, with both hovering around zero. 
 
 Without further ado, let's dive into the code!
 
