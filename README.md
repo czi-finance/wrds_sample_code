@@ -107,11 +107,11 @@ proc sort nodupkey; by gvkey datadate;
 run;
 ```
 
-3. Add to the *Panel* the relevant financial statement items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`).
+3. Add to the *Panel* the relevant financial statement items as well as any variables of interest calculated from them (e.g., book value of equity `be`, market value of equity `me`, book value of debt `bd`, asset turnover `to`, profit margin `pm`, etc.).
 For each firm, exclude the preceding and trailing null observations---that is, those earlier (later) than the first (last) available record.
 (This makes the *Panel* unbalanced, but significantly reduces its size.)
 Note that alternative definitions are used to minimize the instances of missing value. 
-Besides, (preliminary) sanity checks are conducted when defining variables.
+Besides, (preliminary) sanity checks are conducted when defining all variables.
 ```sas
 proc sql;
 create table _tmp11 (drop = _gvkey _fyear) as
@@ -195,7 +195,7 @@ run;
 ```
 
 5. Obtain the footnotes for certain data items from the Fundamental Annual Footnote file. 
-They can be used to identify and filter outliers caused by some extraordinary corporate actions/events (e.g., M&A, spin-off, bankruptcy, etc.).
+They can be used to identify and filter out extreme values caused by some extraordinary corporate actions/events (e.g., M&A, spin-off, bankruptcy, etc.).
 ```sas
 proc sql;
 create table _tmp4 as
