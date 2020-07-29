@@ -101,8 +101,7 @@ Here, only U.S. firm-years with non-missing book value of assets are included.
 It is important to do a sanity check and see whether the pair of `gvkey` and `datadate` uniquely identify observations.
 ```sas
 data funda_short; set comp.funda;
-where &comp_sample_period. and
-      &funda_filter.;
+where &comp_sample_period. and &funda_filter.;
 keep &funda_keys. &funda_vars.;
 proc sort nodupkey; by gvkey datadate;
 run;
@@ -127,23 +126,27 @@ proc sort; by gvkey fyear datadate;
 data _tmp2;
 format gvkey fyear datadate conm sic;
 keep gvkey fyear datadate conm sic
-     at sale be me bd to pm ib PnI;
+     at sale ib be me bd PnI to pm ic;
 set _tmp11; by gvkey fyear datadate;
 /* if last.fyear; */
 if not missing(sich) then sic = put(sich , z4.);
 /* naics = coalesce(naicsh , naics); */
 /* naics3 = substr(put(naics , 6. -l) , 1 , 3); */
-sale = ifn(missing(sale) , revt , sale);
 /*************** VARIABLE DEFINITION ***************/
-be = coalesce(seq , sum(ceq , pstk) , sum(at - lt , -mib))
+be = coalesce(seq , sum(ceq , pstk) , sum(at-lt , -mib))
      + coalesce(txditc , sum(txdb , itcb) ,
                 lt - lct - lo - dltt , 0)
      - coalesce(pstkrv , pstkl , pstk , 0);
 me = prcc_f * csho; me = ifn(me>0,me,.);
-bd = dlc + dltt;
+bd = dlc + dltt; bd = ifn(bd>0,bd,.);
+ppegt = coalesce(ppegt , ppent+dpact);
+PnI = ppegt + invt; PnI = ifn(PnI>0,PnI,.);
+sale = ifn(missing(sale) , revt , sale);
 to = sale / ifn(at>0,at,.);
-pm = coalesce(oiadp , oibdp-dp) / ifn(sale>0,sale,.);
-PnI = sum(ppegt , invt);
+oibdp = coalesce(oibdp , sale-xopr , sale-cogs-xsga);
+oiadp = coalesce(oiadp , oibdp-dp);
+pm = oiadp / ifn(sale>0,sale,.);
+ic = oiadp / ifn(xint>0,xint,.);
 /* check uniqueness of the key */
 proc sort nodupkey; by gvkey fyear; 
 run;
@@ -156,13 +159,12 @@ use its market capitalization at the end of a fiscal year (or the following quar
 data _tmp21;
 keep gvkey datadate me_secm;
 set comp.secm;
-where &secm_filter. and
-      &secm_sample_period.;
-me_secm = prccm * cshoq;
-rename datadate = mdate;
+where &secm_filter. and &secm_sample_period.;
+me_secm = prccm * cshoq; 
 if not missing(me_secm);
+rename datadate = mdate;
 /* check uniqueness of the key */
-proc sort nodupkey; by gvkey mdate; 
+proc sort nodupkey; by gvkey mdate;
 run;
 
 proc sql;
@@ -186,7 +188,7 @@ by gvkey fyear datadate;
 me_secm = coalesce(of me_secm1 - me_secm2);
 me = coalesce(me , me_secm); me = ifn(me>0,me,.);
 /*************** VARIABLE DEFINITION ***************/
-if bd gt 0 then ml = bd / (me + bd);
+ml = bd / (me + bd);
 bm = be / me;
 proc sort nodupkey; by gvkey fyear; 
 run;
@@ -198,11 +200,10 @@ They can be used to identify and filter outliers caused by some extraordinary co
 proc sql;
 create table _tmp4 as
 select a.* , b.at_fn , b.sale_fn
-from _tmp3 as a
-left join 
+from _tmp3 as a left join 
   (select * from comp.funda_fncd
    where &comp_sample_period. 
-   and &funda_fncd_filter.) as b
+     and &funda_fncd_filter.) as b
   on a.gvkey eq b.gvkey and
      a.datadate eq b.datadate
 ;
@@ -224,8 +225,7 @@ having sale_gov gt 0
 ;
 create table comp_funda_clean as
 select a.* , b.sale_gov
-from _tmp4 as a
-left join _tmp41 as b
+from _tmp4 as a left join _tmp41 as b
 on a.gvkey eq b.gvkey and
    a.datadate eq b.datadate
 ;
