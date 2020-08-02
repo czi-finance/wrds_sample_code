@@ -16,7 +16,7 @@ I am happy to help!
 
 - [Examine companies' financial performance over time](#comp)
 - [Construct stock portfolios based on various characteristics](#crsp)
-- [Compare companies' actual earnings with analysts' forecasts](#ibes)
+- [Compare analysts' forecasts with companies' actual earnings](#ibes)
 
 <a name="comp"></a>
 ## Examine companies' financial performance over time
@@ -248,7 +248,7 @@ It also helps reveal bugs if there is any.
 ## Construct stock portfolios based on various characteristics
 
 <a name="ibes"></a>
-## Compare companies' actual earnings with analysts' forecasts
+## Compare analysts' forecasts with companies' actual earnings
 
 In this program, I build from [IBES](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=221&_ga=2.202254610.2026535339.1587168594-1066308586.1576595708) a data set that contains US companies' actual *earnings per share* (EPS) for certain fiscal years, along with the corresponding forecasts made by financial analysts prior to the earnings announcements.
 This data set can be used to address questions like:
