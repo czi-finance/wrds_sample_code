@@ -7,8 +7,7 @@ By walking through the steps in each program, one can
 and (2) understand the proper steps in the relevant cleaning processes.
 I believe these programs are well-written and should be pretty straightforward to interpret (even for people who are new to SAS).
 They are also very flexible and can be easily tailored to fit specific research needs.
-(I personally have used these programs as building blocks for more complicated projects.) 
-<!-- I provide a few examples here -->
+(I personally have used these programs as building blocks for more complicated projects.) <!-- I provide a few examples here -->
 You should be able to run these programs smoothly on [SAS Studio](https://wrds-www.wharton.upenn.edu/pages/data/sas-studio-wrds/).
 Should you have any questions and see any bugs, please submit an issue or email me at i@czi.finance.
 I am happy to help!
