@@ -15,7 +15,7 @@ I am happy to help!
 ### Table of Contents
 
 - [Examine companies' financial performance over time](#comp)
-- [Construct stock portfolios based on various characteristics](#crsp)
+- [Construct stock portfolios based on momentum](#crsp)
 - [Compare analysts' forecasts with companies' actual earnings](#ibes)
 
 <a name="comp"></a>
@@ -245,7 +245,7 @@ I believe this is a good practice that helps prevent unintentionally duplicating
 It also helps reveal bugs if there is any.
 
 <a name="crsp"></a>
-## Construct stock portfolios based on various characteristics
+## Construct stock portfolios based on momentum
 
 <a name="ibes"></a>
 ## Compare analysts' forecasts with companies' actual earnings
