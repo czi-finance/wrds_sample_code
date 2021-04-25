@@ -245,7 +245,7 @@ I believe this is a good practice that helps prevent unintentionally duplicating
 It also helps reveal bugs if there is any.
 
 <a name="crsp"></a>
-## Construct stock portfolios based on momentum
+## Construct stock portfolios based on various characteristics
 
 <a name="ibes"></a>
 ## Compare analysts' forecasts with firms' actual earnings
