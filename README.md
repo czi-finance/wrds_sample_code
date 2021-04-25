@@ -15,7 +15,7 @@ I am happy to help!
 ### Table of Contents
 
 - [Examine companies' financial performance over time](#comp)
-- [Construct stock portfolios based on momentum](#crsp)
+- [Construct stock portfolios based on various characteristics](#crsp)
 - [Compare analysts' forecasts with firms' actual earnings](#ibes)
 
 <a name="comp"></a>
