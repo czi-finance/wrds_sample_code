@@ -1,22 +1,25 @@
 # Sample SAS Programs for Processing WRDS Data
 
-In this repository, I present a selection of SAS programs that (pre-)process [WRDS](https://wrds-www.wharton.upenn.edu/) data.
-My goal is to provide efficient procedures for transforming raw data from various WRDS databases (e.g., CRSP, Compustat, IBES, etc.) into clean and well-structured datasets with only variables of interest, which are conducive to subsequent analysis.
+In this repository, I present a selection of SAS programs that (pre-)process [WRDS](https://wrds-www.wharton.upenn.edu/) data and compute certain variables/measures, as well as conduct some simple analysis.
+My goal is to provide efficient procedures for transforming raw data from various WRDS databases (e.g., CRSP, Compustat, IBES, etc.) into clean and well-structured datasets that contain only variables of interest and are conducive to econometric analysis.
 By walking through the steps in each program, one can
 (1) quickly gain a working knowledge of related raw data (e.g., file structures, variable definitions, etc.),
-and (2) understand the proper steps in the relevant cleaning processes.
+and (2) understand the proper steps in the cleaning processes.
 I believe these programs are well-written and should be pretty straightforward to interpret (even for people who are new to SAS).
-They are also very flexible and can be easily tailored to fit specific research needs.
+They are also very flexible and can be easily tailored to serve other purposes.
 (I personally have used these programs as building blocks for more complicated projects.) <!-- I provide a few examples here -->
 You should be able to run these programs smoothly on [WRDS SAS Studio](https://wrds-www.wharton.upenn.edu/pages/data/sas-studio-wrds/).
-Should you have any questions or find any bugs, please submit an issue or email me at i@czi.finance.
+Should you have any questions or find any bugs, please submit an issue or email me at [i@czi.finance](mailto:i@czi.finance).
 I am happy to help!
 
 ### Table of Contents
-
+#### Basic programs
 - [Examine companies' financial performance over time](#comp)
 - [Construct stock portfolios based on various characteristics](#crsp)
 - [Compare analysts' forecasts with firms' actual earnings](#ibes)
+#### Additional programs
+- [Calculate market betas according to Welch (2019)](./src/calc_welch_market_beta.md)
+
 
 <a name="comp"></a>
 ## Examine companies' financial performance over time
