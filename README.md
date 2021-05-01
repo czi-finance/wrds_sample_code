@@ -237,7 +237,7 @@ proc sort nodupkey; by gvkey fyear;
 run;
 ```
 
-7. One can export the *Panel* in different formats (e.g., .dta, .csv) for any subsequent analysis. 
+7. One can export the *Panel* in different formats (e.g., .dta, .csv) conducive to subsequent analysis. 
 For example, I use `comp_funda_clean` in Stata to plot those figures above.
 ```sas
 %let FFP = "[The Path to Your Output Folder]/comp_funda_clean.dta";
