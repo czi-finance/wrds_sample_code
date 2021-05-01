@@ -24,7 +24,7 @@ I am happy to help!
 <a name="comp"></a>
 ## Examine companies' financial performance over time
 
-In this program, I build from [Compustat](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=60) a data set that contains various financial measures for U.S. companies; they are calculated from annual financial statements.
+In this program, I build from [Compustat](https://wrds-web.wharton.upenn.edu/wrds/query_forms/navigation.cfm?navId=60) a data set that contains various financial measures for U.S. companies; they are calculated from **annual** financial statements.
 This data set can be used to study and compare the performance of one or more companies over time. 
 As an illustration, I plot four figures below using this data. 
 The first two shows the market leverage, asset turnover, and profit margin, as well as the asset and sales growth and the market-to-book (assets) ratio for **Tesla Inc.** (`gvkey = 184996`) over the past five fiscal years.
