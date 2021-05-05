@@ -10,7 +10,8 @@ They are also very flexible and can be easily tailored to serve specific researc
 (I personally have used these programs as building blocks for more complicated projects.) <!-- I provide a few examples here -->
 You should be able to run these programs smoothly on [WRDS SAS Studio](https://wrds-www.wharton.upenn.edu/pages/data/sas-studio-wrds/).
 Should you have any questions or find any bugs, please submit an issue or email me at [i@czi.finance](mailto:i@czi.finance).
-I am happy to help!
+I will do my best to help!
+
 
 ### Table of Contents
 #### Basic programs
