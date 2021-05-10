@@ -1,3 +1,4 @@
+<a name="top"></a>
 # Sample SAS Programs for Processing WRDS Data
 
 In this repository, I present a selection of SAS programs that (pre-)process [WRDS data](https://wrds-www.wharton.upenn.edu/) and compute certain variables/measures, as well as conduct some simple analysis.
@@ -6,7 +7,7 @@ By walking through the steps in each program, one can
 (1) quickly gain a working knowledge of related raw data (e.g., file structures, variable definitions, etc.),
 and (2) understand the proper steps in the cleaning processes.
 I believe these programs are well-written and should be pretty straightforward to interpret (even for people who are new to SAS).
-They are also very flexible and can be easily tailored to serve specific research needs.
+They are also very adaptable and can be easily tailored to serve specific research purposes.
 (I personally have used these programs as building blocks for more complicated projects.) <!-- I provide a few examples here -->
 You should be able to run these programs smoothly on [WRDS SAS Studio](https://wrds-www.wharton.upenn.edu/pages/data/sas-studio-wrds/).
 Should you have any questions or find any bugs, please submit an issue or email me at [i@czi.finance](mailto:i@czi.finance).
@@ -16,7 +17,7 @@ I will do my best to help!
 ### Table of Contents
 #### Basic programs
 - [Examine companies' financial performance over time](#comp)
-- [Construct stock portfolios based on various characteristics](#crsp)
+- [Construct stock portfolios based on past characteristics](#crsp)
 - [Compare analysts' forecasts with firms' actual earnings](#ibes)
 #### Additional programs
 - [Calculate market betas according to Welch (2019)](./src/calc_welch_market_beta.md)
@@ -248,8 +249,10 @@ Note that I use `left join` when adding new variables to the *Panel*, and then c
 I believe this is a good practice that helps prevent unintentionally duplicating or deleting observations when one merges data.
 It also helps reveal bugs if there is any.
 
+[Back to top](#top)
+
 <a name="crsp"></a>
-## Construct stock portfolios based on various characteristics
+## Construct stock portfolios based on past characteristics
 
 <a name="ibes"></a>
 ## Compare analysts' forecasts with firms' actual earnings
@@ -442,3 +445,5 @@ proc means data = _tmp5
   var num_analys epratio ferr1 ferr2;
 run;
 ```
+
+[Back to top](#top)
