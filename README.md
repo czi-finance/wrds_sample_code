@@ -62,7 +62,6 @@ Obtain a complete list of covered companies, and construct a *balanced* panel (w
 ```sas
 %let yr_beg = 1950; 
 %let yr_end = 2019;
-%let yr_beg = 1950; %let yr_end = 2019;
 %let funda_filter = ((indfmt eq "INDL") and (consol eq 'C') and
                      (popsrc eq 'D') and (datafmt eq "STD") and
                      (fic eq "USA") and (curncd eq "USD") and 
